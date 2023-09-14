@@ -41,35 +41,37 @@ class AuthController extends Controller
         ], 401);
     }
 
-    public function register(Request $request)
+   public function register(Request $request)
     {
+
         $request->validate([
-            'identifiant' => 'required|string|unique:users',
+            'identifiant' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'type' => 'required|string',
-            'entreprise' => 'required|string',
             'password' => 'required|string',
+            'type' => 'required|string',
+            'entreprise' => 'required|string'
         ]);
 
         $user = User::create([
             'identifiant' => $request->identifiant,
             'email' => $request->email,
+            'password' => Hash::make($request->password),
             'type' => $request->type,
             'entreprise' => $request->entreprise,
-            'password' => Hash::make($request->password),
         ]);
-
         Auth::login($user);
-        $token = $user->createToken('MyApp')->accessToken;
+        $user_id = Auth::user()->id;
+        $credentials = $request->only('email', 'password');
 
+        $token = Auth::attempt($credentials);
         return response()->json([
             'status' => 'success',
             'user' => $user,
-            'authorization' => [
+            'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',
             ]
-        ]);
+        ]);;
     }
 
     // Autres méthodes (updateProfile, logout, refresh, destroy) restent inchangées...
