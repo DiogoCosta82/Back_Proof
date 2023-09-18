@@ -2,82 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller {
+    // register a new user method
+    public function register(RegisterRequest $request) {
+        $data = $request->validated();
 
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $user = User::create([
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'type_user' => $data['type_user'],
+            'enterprise' => $data['enterprise'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password'])
+        ]);
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $cookie = cookie('token', $token, 60 * 24); // 1 day
+
+        return response()->json([
+            'user' => new UserResource($user),
+        ])->withCookie($cookie);
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string'
+    // login a user method
+    public function login(LoginRequest $request) {
+        $data = $request->validated();
 
-        ]);
-        $credentials = $request->only('email', 'password');
+        $user = User::where('email', $data['email'])->first();
 
-        $token = Auth::attempt($credentials);
-        if (!$token) {
+        if (!$user || !Hash::check($data['password'], $user->password)) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
+                'message' => 'Email or password is incorrect!'
             ], 401);
         }
 
-        $user = Auth::user();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $cookie = cookie('token', $token, 60 * 24); // 1 day
+
         return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+            'user' => new UserResource($user),
+        ])->withCookie($cookie);
     }
 
+    // logout a user method
+    public function logout(Request $request) {
+        if ($request->user()) {
+            // Supprimez le jeton d'accès actuel de l'utilisateur
+            $request->user()->currentAccessToken()->delete();
 
-    public function Register(Request $request)
-    {
+            // Supprimez le cookie 'token'
+            $cookie = cookie()->forget('token');
 
-        $request->validate([
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
-            'enterprise' => 'required|string|',
-            'type_user' => 'required|string|',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string'
-        ]);
+            return response()->json([
+                'message' => 'Logged out successfully!'
+            ])->withCookie($cookie);
+        }
 
-        $user = User::create([
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'type_user' => $request->type_user,
-            'enterprise' => $request->enterprise,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
-        
-        Auth::login($user);
-        $user_id = Auth::user()->id;
-        
-        $token = Auth::attempt($credentials);
         return response()->json([
-            'status' => 'success',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+            'message' => 'User not authenticated!'
+        ], 401);
     }
 
+    // get the authenticated user method
+    public function user(Request $request) {
+        return new UserResource($request->user());
+    }
 }
