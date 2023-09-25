@@ -1,8 +1,10 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DossierController;
+
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -20,3 +22,4 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/checkDossier', [DossierController::class, 'checkDossier']);
 
 Route::post('/createDossier', [DossierController::class, 'createDossier']);
+

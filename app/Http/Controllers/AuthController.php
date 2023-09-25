@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
@@ -79,3 +80,4 @@ class AuthController extends Controller {
         return new UserResource($request->user());
     }
 }
+
