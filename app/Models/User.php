@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
+
 
 class User extends Authenticatable 
 {
@@ -19,13 +21,16 @@ class User extends Authenticatable
 
     protected $fillable = [
 
+
         'firstname',
         'lastname',
         'type_user',
         'enterprise',
         'email',
         'password'
+
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,4 +50,5 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
 }
