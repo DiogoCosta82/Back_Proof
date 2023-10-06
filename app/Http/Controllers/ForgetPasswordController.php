@@ -41,7 +41,7 @@ class ForgetPasswordController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
 
-        return response()->json(['status' => 'success', 'message' => 'We have sent you an e-mail to reset your password.']);
+        return response()->json(['status' => 'Success', 'message' => 'Nous vous avons envoyé un e-mail pour réinitialiser votre mot de passe']);
     }
 
     function resetPassword($token)
