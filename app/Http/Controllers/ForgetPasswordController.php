@@ -32,12 +32,16 @@ class ForgetPasswordController extends Controller
             'created_at' => Carbon::now()
         ]);
 
-        Mail::send("emails.forget-password", ['token' => $token], function ($message) use ($request) {
-            $message->to($request->email);
-            $message->subject('Reset Password');
-        });
+        try {
+            Mail::send("emails.forget-password", ['token' => $token], function ($message) use ($request) {
+                $message->to($request->email);
+                $message->subject('Reset Password');
+            });
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+        }
 
-        return response()->json(['status' => 'success', 'message' => 'We have sent you an e-mail to reset your password.']);
+        return response()->json(['status' => 'Success', 'message' => 'Nous vous avons envoyé un e-mail pour réinitialiser votre mot de passe']);
     }
 
     function resetPassword($token)
@@ -48,15 +52,6 @@ class ForgetPasswordController extends Controller
 
     function resetPasswordPost(Request $request)
     {
-
-        // $request->validate([
-        //     'email' => 'required|string|email|unique:users,email,' . Auth::user()->id,
-        //     'password' => "required|string|min:4|confirmed",
-        //     'passwordConfirmation' => "required",
-
-        // ]);
-
-
 
         $updatePassword = DB::table('password_resets')
             ->where([

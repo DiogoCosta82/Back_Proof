@@ -31,7 +31,7 @@ return [
     | users are actually retrieved out of your database or other storage
     | mechanisms used by this application to persist your user's data.
     |
-    | Supported: "session"
+    | Supported: "session", "token"
     |
     */
 
@@ -40,10 +40,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-    
+
+
         'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
+            'driver' => 'sanctum', // Utilisation du pilote Sanctum pour l'authentification API
+            'provider' => 'users', // Fournisseur d'utilisateurs (peut être personnalisé en fonction de vos besoins)
+            'hash' => false, // Si vous ne souhaitez pas que les mots de passe soient hachés (en fonction de vos besoins)
+
         ],
     ],
     
