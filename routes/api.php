@@ -15,7 +15,6 @@ use App\Http\Controllers\ForgetPasswordController;
 //Route::post('/createDossier', [DossierController::class, 'createDossier']);
 
 
-
 // Route::middleware('auth:sanctum')->group(function () {
 //     Route::post('/logout', 'AuthController@logout');
 //     Route::post('/createDossier', 'DossierController@createDossier');
