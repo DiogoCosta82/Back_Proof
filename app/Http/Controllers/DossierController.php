@@ -5,35 +5,43 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Dossier;
+use Illuminate\Support\Facades\Log; 
+
 
 class DossierController extends Controller
 {
-    // Assurez-vous que l'utilisateur est authentifié pour ces méthodes
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
     public function checkDossier(Request $request)
     {
-        $user = Auth::user(); // Récupère l'utilisateur actuellement authentifié
-        $dossier = Dossier::where('user_id', $user->id)->first();
-
+        $userId = $request->input('user_id');  // Récupérer le user_id de la requête
+        $dossier = Dossier::where('user_id', $userId)->first();  // Rechercher un dossier avec ce user_id
+    
         if ($dossier) {
-            return response()->json(['numero' => $dossier->numero]);
+            return response()->json(['n_dossier' => $dossier->n_dossier]);
         } else {
-            return response()->json(['numero' => null]);
+            return response()->json(['n_dossier' => null]);
         }
     }
+    
 
     public function createDossier(Request $request)
-    {
-        $user = Auth::user(); // Récupère l'utilisateur actuellement authentifié
-        $dossier = new Dossier();
-        $dossier->user_id = $user->id;
-        $dossier->numero = $request->numero;
-        $dossier->save();
+{
+    try {
+        $userId = $request->input('user_id');  // Récupérer le user_id depuis la requête
+        $nDossier = $request->input('n_dossier'); // Récupérer le n_dossier depuis la requête
+        
+        if ($userId && $nDossier) {
+            $dossier = new Dossier();
+            $dossier->user_id = $userId;
+            $dossier->n_dossier = $nDossier;
+            $dossier->save();
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['error' => 'Informations manquantes dans la requête'], 400);
+        }
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Erreur lors de la création du dossier'], 500);
     }
+}
+    
 }

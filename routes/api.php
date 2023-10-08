@@ -4,23 +4,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgetPasswordController;
-//use App\Http\Controllers\DossierController;
-
-
-// Route::post('/register', [AuthController::class, 'register']);
-// Route::post('/login', [AuthController::class, 'login']);
-
-//Route::get('/checkDossier', [DossierController::class, 'checkDossier']);
-
-//Route::post('/createDossier', [DossierController::class, 'createDossier']);
+use App\Http\Controllers\DossierController;
 
 
 
-// Route::middleware('auth:sanctum')->group(function () {
-//     Route::post('/logout', 'AuthController@logout');
-//     Route::post('/createDossier', 'DossierController@createDossier');
-//     Route::post('/checkDossier', 'DossierController@checkDossier');
-// });
+/* Route de Controller DossierController */
+Route::get('/checkDossier', [DossierController::class, 'checkDossier']);
+Route::post('/createDossier', [DossierController::class, 'createDossier']);
+
 
 /* Route de Controller ForgetPassword */
 Route::get("/forget-password", [ForgetPasswordController::class, "forgetPassword"])
@@ -34,10 +25,10 @@ Route::post('/reset-password/', [ForgetPasswordController::class, 'resetPassword
 
 
 
-    Route::controller(AuthController::class)->group(function () {
-        Route::post('login', 'login');
-        Route::post('register', 'register');
-        Route::post('logout', 'logout');
+Route::controller(AuthController::class)->group(function () {
+    Route::post('login', 'login');
+    Route::post('register', 'register');
+    Route::post('logout', 'logout');
+});
 
-    });
-
+  
