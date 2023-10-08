@@ -53,6 +53,7 @@ class AuthController extends Controller {
         ]);
     }
 
+
     return response()->json(['message' => 'Unauthorized'], 401);
 }
 
@@ -74,10 +75,6 @@ class AuthController extends Controller {
             ], 401);
         }
     }
-    
-
-    
-
-
  
 }
+
