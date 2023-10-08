@@ -73,8 +73,7 @@ class ForgetPasswordController extends Controller
         ])->delete();
 
 
-        return response()->json([
-            'status' => 'success'
-        ]);
+        return response()->json(['status' => 'Success', 'message' => 'Le mot de passe à été bien modifié']);
+        
     }
 }
