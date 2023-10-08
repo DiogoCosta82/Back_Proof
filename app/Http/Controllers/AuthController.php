@@ -17,7 +17,7 @@ class AuthController extends Controller {
     $request->validate([
         'firstname' => 'required|string|max:255',
         'lastname' => 'required|string|max:255',
-        'type_user' => 'required|string|in:Admin,User',
+        'type_user' => 'required|string|in:admin,user',
         'enterprise' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
         'password' => 'required|string|min:8',
@@ -32,8 +32,8 @@ class AuthController extends Controller {
         'email' => $request->input('email'),
         'password' => bcrypt($request->input('password')),
     ]);
-
-    return response()->json(['status' => 'success', 'user' => $user]);
+    $token = $user->createToken('auth_token')->plainTextToken;
+    return response()->json(['status' => 'success', 'user' => $user, 'token'=>$token,],201);
 }
 
 
@@ -80,4 +80,3 @@ class AuthController extends Controller {
         return new UserResource($request->user());
     }
 }
-
