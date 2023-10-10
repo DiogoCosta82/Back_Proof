@@ -43,5 +43,14 @@ class DossierController extends Controller
         return response()->json(['error' => 'Erreur lors de la création du dossier'], 500);
     }
 }
+public function getDossiers()
+{
+    // Récupérer tous les dossiers avec le numéro de dossier et le nom de l'entreprise
+    $dossiers = Dossier::select('dossiers.n_dossier', 'users.enterprise')
+        ->leftJoin('users', 'dossiers.user_id', '=', 'users.id')
+        ->get();
+
+    return response()->json($dossiers);
+}
     
 }

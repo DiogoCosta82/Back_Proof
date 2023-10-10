@@ -11,6 +11,8 @@ use App\Http\Controllers\DossierController;
 /* Route de Controller DossierController */
 Route::get('/checkDossier', [DossierController::class, 'checkDossier']);
 Route::post('/createDossier', [DossierController::class, 'createDossier']);
+Route::get('/getDossiers', [DossierController::class, 'getDossiers']);
+
 
 
 /* Route de Controller ForgetPassword */
