@@ -9,13 +9,13 @@ class Dossier extends Model
 {
     use HasFactory;
 
-
-    protected $table = 'dossiers';
-
     protected $fillable = [
-        'numero',
+        'user_id',
+        'n_dossier',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
-
-
