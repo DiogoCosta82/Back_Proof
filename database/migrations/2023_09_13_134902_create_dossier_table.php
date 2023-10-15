@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('dossiers', function (Blueprint $table) {
             $table->id();
-            //$table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('numero')->unique();
+            $table->string('n_dossier')->unique();
             $table->timestamps();
         });
     }

@@ -37,7 +37,7 @@ class ForgetPasswordController extends Controller
             $message->subject('Reset Password');
         });
 
-        return response()->json(['status' => 'success', 'message' => 'We have sent you an e-mail to reset your password.']);
+        return response()->json(['status' => 'success', 'message' => 'Nous vous avons envoyé un e-mail pour réinitialiser votre mot de passe']);
     }
 
     function resetPassword($token)
@@ -48,14 +48,6 @@ class ForgetPasswordController extends Controller
 
     function resetPasswordPost(Request $request)
     {
-
-        // $request->validate([
-        //     'email' => 'required|string|email|unique:users,email,' . Auth::user()->id,
-        //     'password' => "required|string|min:4|confirmed",
-        //     'passwordConfirmation' => "required",
-
-        // ]);
-
 
 
         $updatePassword = DB::table('password_resets')
@@ -78,8 +70,6 @@ class ForgetPasswordController extends Controller
         ])->delete();
 
 
-        return response()->json([
-            'status' => 'success'
-        ]);
+        return response()->json(['status' => 'success', 'message' => 'Votre mot de passe à été bien modifie !']);
     }
 }
