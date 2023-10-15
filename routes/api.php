@@ -31,6 +31,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
     Route::post('logout', 'logout');
+    Route::match(['get', 'post'], 'update', 'updateProfile');
+    Route::delete('/delete/', 'destroy');
 });
 
   
