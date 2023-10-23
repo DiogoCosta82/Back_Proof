@@ -16,9 +16,9 @@ class DossierController extends Controller
         $dossier = Dossier::where('user_id', $userId)->first();  // Rechercher un dossier avec ce user_id
     
         if ($dossier) {
-            return response()->json(['n_dossier' => $dossier->n_dossier]);
+            return response()->json(['dossier_id' => $dossier->id, 'n_dossier' => $dossier->n_dossier]);
         } else {
-            return response()->json(['n_dossier' => null]);
+            return response()->json(['dossier_id' => null, 'n_dossier' => null]);
         }
     }
     
@@ -35,7 +35,7 @@ class DossierController extends Controller
             $dossier->n_dossier = $nDossier;
             $dossier->save();
 
-            return response()->json(['success' => true]);
+            return response()->json(['dossier_id' => $dossier->id, 'success' => true]);
         } else {
             return response()->json(['error' => 'Informations manquantes dans la requête'], 400);
         }
@@ -52,5 +52,4 @@ public function getDossiers()
 
     return response()->json($dossiers);
 }
-    
 }
